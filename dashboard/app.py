@@ -37,7 +37,7 @@ def init_db():
 
 init_db()
 
-st.title("👽 Centrum Monitoringu Krzysia")
+st.title("🧑🏻‍🚀 Centrum Monitoringu Krzysia")
 
 @st.fragment(run_every="2s")
 def render_telemetry():
@@ -52,7 +52,7 @@ def render_telemetry():
         st.info("No data :( waiting")
         return
         
-    # Process fetched data and deserialize Protobuf
+    # Process data and deserialize Protobuf
     parsed_data = []
     for row in reversed(rows):
         timestamp, binary_data = row
@@ -77,20 +77,17 @@ def render_telemetry():
     c3.metric("Temperatura", f"{latest['Temp']} °C")
     c4.metric("Nastrój", latest['Mood'])
     
-    # Display charts
-    st.line_chart(df.set_index("Time")[["Energia", "Tętno"]])
+    st.line_chart(df.set_index("Time")[["Energy", "HeartRate"]])
 
-# Call the fragment function
 render_telemetry()
 
 st.divider()
 
-# Chat interface
+
 st.subheader("💬 Komunikacja")
 
-# Fetch and display chat history
 with conn.cursor() as cur:
-    cur.execute("SELECT sender, text FROM messages ORDER BY id ASC")
+    cur.execute("SELECT sender, text FROM messages ORDER BY id ASC") #Select and show chat history
     chat_rows = cur.fetchall()
 
 for sender, text in chat_rows:
@@ -98,17 +95,14 @@ for sender, text in chat_rows:
     with st.chat_message(role):
         st.markdown(text)
 
-# Handle new messages
-if prompt := st.chat_input("Napisz wiadomość do Krzysia..."):
+
+if prompt := st.chat_input("Napisz wiadomość do Krzysia"):
     with conn.cursor() as cur:
-        # Save user message
         cur.execute("INSERT INTO messages (sender, text) VALUES (%s, %s)", ("Ziemia", prompt))
         
-        # Simulate Krzysiu's reply
-        replies = ["Zrozumiałem, Ziemio!", "Krzysiu czuje się świetnie.", "Przesyłam pozdrowienia!"]
+        replies = ["Zrozumiałem, Ziemio!", "Krzysiu czuje się świetnie.", "Przesyłam pozdrowienia!", "Bajo jajo"]
         reply = random.choice(replies)
         
-        # Save Krzysiu's reply
         cur.execute("INSERT INTO messages (sender, text) VALUES (%s, %s)", ("Krzysiu", reply))
     conn.commit()
     
