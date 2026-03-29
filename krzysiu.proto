@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+message VitalSigns {
+  int32 energy = 1;
+  int32 heart_rate = 2;
+  float temperature = 3;
+  string mood = 4;
+}
