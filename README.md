@@ -8,6 +8,9 @@ docker-compose up --build
 
 Po uruchomieniu kontenerów otwórz w przeglądarce: **http://localhost:8501**.
 
+<img width="901" height="1197" alt="Screenshot_20260329_222525" src="https://github.com/user-attachments/assets/b25846eb-7e5e-40cb-98e6-70f8d1331afc" />
+
+
 ## Co potrafi system<br>
 Przyjmuje, dekoduje i wizualizuje na wykresach telemetrię Krzysia w czasie rzeczywistym (energia, tętno, temperatura, nastrój).
 
