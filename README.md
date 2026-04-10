@@ -10,6 +10,13 @@ Po uruchomieniu kontenerów otwórz w przeglądarce: **http://localhost:8501**.
 
 <img width="901" height="1197" alt="Screenshot_20260329_222525" src="https://github.com/user-attachments/assets/b25846eb-7e5e-40cb-98e6-70f8d1331afc" />
 
+Dane można również przeglądać w formie tabeli
+<img width="752" height="400" alt="image" src="https://github.com/user-attachments/assets/f0d9bd66-3faf-4b2e-95ec-4051ceea7dd7" />
+
+Jeśli trzeba, dane można pobrać w formacie CSV
+<img width="752" height="468" alt="image" src="https://github.com/user-attachments/assets/762a283d-8e6e-4a12-ba45-4a3db5bbb8d4" />
+
+
 
 ## Co potrafi system<br>
 Przyjmuje, dekoduje i wizualizuje na wykresach telemetrię Krzysia w czasie rzeczywistym (energia, tętno, temperatura, nastrój).
