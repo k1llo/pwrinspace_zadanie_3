@@ -1,7 +1,6 @@
 import os
 import time
 import random
-import psycopg2
 import krzysiu_pb2
 import db
 

@@ -1,7 +1,6 @@
 import os
 import random
 import pandas as pd
-import psycopg2
 import streamlit as st
 import krzysiu_pb2
 import db
