@@ -4,38 +4,18 @@ import pandas as pd
 import psycopg2
 import streamlit as st
 import krzysiu_pb2
+import db
 
 st.set_page_config(page_title="Centrum Krzysia", page_icon="🧑🏻‍🚀")
 
 DB_URL = os.environ.get("DB_URL")
 
 @st.cache_resource
-def init_connection():
-    conn = psycopg2.connect(DB_URL)
-    conn.autocommit = True
-    return conn
+def get_connection():
+    return db.init_connection(DB_URL)
 
-conn = init_connection()
-
-def init_db():
-    with conn.cursor() as cur:
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS messages (
-                id SERIAL PRIMARY KEY,
-                sender VARCHAR(50) NOT NULL,
-                text TEXT NOT NULL,
-                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        """)
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS telemetry (
-                id SERIAL PRIMARY KEY,
-                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                data BYTEA NOT NULL
-            )
-        """)
-
-init_db()
+conn = get_connection()
+db.init_db(conn)
 
 st.title("🧑🏻‍🚀 Centrum Monitoringu Krzysia")
 
@@ -44,9 +24,7 @@ def render_telemetry():
     st.subheader("📊 Funkcje Życiowe")
     
    
-    with conn.cursor() as cur:
-        cur.execute("SELECT timestamp, data FROM telemetry ORDER BY id DESC LIMIT 30") # Select last 30 records
-        rows = cur.fetchall()
+    rows = db.fetch_recent_telemetry(conn)
         
     if not rows:
         st.info("No data :( waiting")
@@ -54,8 +32,7 @@ def render_telemetry():
         
     # Process data and deserialize Protobuf
     parsed_data = []
-    for row in reversed(rows):
-        timestamp, binary_data = row
+    for timestamp, binary_data in reversed(rows):
         vitals = krzysiu_pb2.VitalSigns()
         vitals.ParseFromString(binary_data)
         
@@ -82,13 +59,9 @@ def render_telemetry():
 render_telemetry()
 
 st.divider()
-
-
 st.subheader("💬 Komunikacja")
 
-with conn.cursor() as cur:
-    cur.execute("SELECT sender, text FROM messages ORDER BY id ASC") #Select and show chat history
-    chat_rows = cur.fetchall()
+chat_rows = db.fetch_messages(conn)
 
 for sender, text in chat_rows:
     role = "user" if sender == "Ziemia" else "assistant"
@@ -98,12 +71,11 @@ for sender, text in chat_rows:
 
 if prompt := st.chat_input("Napisz wiadomość do Krzysia"):
     with conn.cursor() as cur:
-        cur.execute("INSERT INTO messages (sender, text) VALUES (%s, %s)", ("Ziemia", prompt))
+        db.insert_message(conn, "Ziemia", prompt)
         
         replies = ["Zrozumiałem, Ziemio!", "Krzysiu czuje się świetnie.", "Przesyłam pozdrowienia!", "Bajo jajo"]
         reply = random.choice(replies)
         
-        cur.execute("INSERT INTO messages (sender, text) VALUES (%s, %s)", ("Krzysiu", reply))
-    conn.commit()
+        db.insert_message(conn, "Krzysiu", reply)
     
     st.rerun()

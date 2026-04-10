@@ -3,25 +3,16 @@ import time
 import random
 import psycopg2
 import krzysiu_pb2
+import db
 
 DB_URL = os.environ.get("DB_URL")
 
-def init_db(conn):
-    with conn.cursor() as cur:
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS telemetry (
-                id SERIAL PRIMARY KEY,
-                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                data BYTEA NOT NULL
-            )
-        """)
-    conn.commit()
 
 def main():
     time.sleep(5) # Waitin just to make sure that posgres is up
     
-    conn = psycopg2.connect(DB_URL)
-    init_db(conn)
+    conn = db.init_connection(DB_URL)
+    db.init_db(conn)
     
     print("Emulator started. Sending data to Krzysiu")
     
@@ -35,12 +26,7 @@ def main():
         
         binary_data = vitals.SerializeToString()
         
-        with conn.cursor() as cur:
-            cur.execute(
-                "INSERT INTO telemetry (data) VALUES (%s)",
-                (psycopg2.Binary(binary_data),)
-            )
-        conn.commit()
+        db.insert_telemetry(conn,binary_data)
         
         time.sleep(2)
 
