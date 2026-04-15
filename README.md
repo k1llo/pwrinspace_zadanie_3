@@ -51,5 +51,18 @@ Pełni rolę centrum monitoringu.
 
 **chat_interface**: Zapisuje wiadomość użytkownika w bazie danych i natychmiast generuje losową odpowiedź w imieniu Krzysia. Historia jest bezpiecznie zapisywana i wczytywana przy ponownym uruchomieniu.
 
+## Co chciałbym dodać:
 
-### **Uwaga dotycząca docker-compose.yml**: Tak, mam świadomość, że wpisywanie hasła do bazy danych otwartym tekstem w pliku compose to zła praktyka. Zdecydowałem się jednak nie komplikować rozwiązania – w przeciwnym razie skorzystałbym z Secret Managera lub przeniósł dane uwierzytelniające do pliku .env.
+Uwierzytelnianie i autoryzacja. Możliwość przeglądania różnych danych w zależności od poziomu dostępu
+
+Śledzenie lokalizacji rakiety w czasie rzeczywistym
+
+Schemat aktywno-pasywny dla bazy danych
+
+Możliwość ręcznego dodawania, edytowania i usuwania widżetów bezpośrednio z przeglądarki
+
+Alerty w przypadku, gdy którekolwiek ze wskaźników wykraczają poza dopuszczalne granice
+
+Obsługa połączenia przez port szeregowy (Serial port)
+
+## **Uwaga dotycząca docker-compose.yml**: Tak, mam świadomość, że wpisywanie hasła do bazy danych otwartym tekstem w pliku compose to zła praktyka. Zdecydowałem się jednak nie komplikować rozwiązania – w przeciwnym razie skorzystałbym z Secret Managera lub przeniósł dane uwierzytelniające do pliku .env.
