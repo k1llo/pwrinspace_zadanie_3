@@ -5,6 +5,11 @@ Upewnij się, że masz zainstalowany Docker. W folderze głównym projektu wykon
 ```
 docker-compose up --build
 ```
+albo
+
+```
+docker compose up --build
+```
 
 Po uruchomieniu kontenerów otwórz w przeglądarce: **http://localhost:8501**.
 
